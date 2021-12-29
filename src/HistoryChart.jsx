@@ -87,7 +87,8 @@ export const HistoryChart = ({ data }) => {
 			.attr('stroke', d => colorScale(d[0]))
 			.attr('fill', 'none')
 			.attr('stroke-width', 3)
-			.style('transform', `translate(${horizontalMargin}px, ${verticalMargin}px)`)
+			.style('transform', `translate(${horizontalMargin}px, ${verticalMargin}px)`);
+
 	}, [data]);
 
 	return (
