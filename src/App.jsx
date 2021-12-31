@@ -5,7 +5,6 @@ const appStyles = { height: '100vh' };
 
 export const App = () => {
 	const [data, setData] = useState(null);
-
 	useEffect(() => {
 		const timer1 = setInterval(() => {
 			setData(Math.round(Math.random() * 10 + 65));
