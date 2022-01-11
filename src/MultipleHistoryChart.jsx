@@ -18,25 +18,8 @@ const useResizeObserver = (ref) => {
 	return dimensions;
 }
 
-export const NestedHistoryChart = ({ data }) => {
-
-
-
-	//----------------------------------------
-	const NESTED_MOCK = [
-		{name: 'Data Ingress', value: 50},
-		{name: 'Data Egress', value: 30},
-		{name: 'Data Ingress', value: 74},
-		{name: 'Data Egress', value: 60},
-		{name: 'Data Ingress', value: 100},
-		{name: 'Data Egress', value: 20},
-	];
-	let nestedData = d3.group(NESTED_MOCK, d => d.name)
-	console.log(nestedData);
-	//----------------------------------------
-
+export const MultipleHistoryChart = ({ data }) => {
 	const [historicData, setHistoricData] = useState([]);
-
 	const [scaleMinDelta, setScaleMinDelta] = useState(-5);
 	const [scaleMaxDelta, setScaleMaxDelta] = useState(5);
 	const [historySize, setHistorySize] = useState(10);
@@ -53,6 +36,14 @@ export const NestedHistoryChart = ({ data }) => {
 		newData.unshift(data);
 		setHistoricData(newData);
 
+
+		let packetsOut = newData?.map(x => x?.packetsOut);		
+		let packetsIn = newData?.map(x => x?.packetsIn);
+		let bytesOut = newData?.map(x => x?.bytesOut);
+		let bytesIn = newData?.map(x => x?.bytesIn);
+		let packetsDropped = newData?.map(x => x?.packetsDropped);
+
+
 		const verticalMargin = 40;
 		const horizontalMargin = 40;
 		const svgWidth = dimensions.width - horizontalMargin;
@@ -67,7 +58,8 @@ export const NestedHistoryChart = ({ data }) => {
 			.domain([historySize, 0])
 			.range([0, svgWidth - horizontalMargin]);
 
-		const yDomain = [d3.min(historicData) + scaleMinDelta, d3.max(historicData) + scaleMaxDelta];
+		const yDomain = [0 + scaleMinDelta, 100 + scaleMaxDelta];
+		// const yDomain = [d3.min(historicData) + scaleMinDelta, d3.max(historicData.packetsOut) + scaleMaxDelta];
 		const yScale = d3.scaleLinear()
 			.domain(yDomain)
 			.range([svgHeight - verticalMargin, 0]);
@@ -100,7 +92,7 @@ export const NestedHistoryChart = ({ data }) => {
 		svg
 		// g
 			.selectAll('.line')
-			.data([historicData])
+			.data([packetsOut])
 			.join('path')
 			.attr('class', 'line')
 			.attr('d', line1)

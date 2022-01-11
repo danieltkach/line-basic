@@ -20,7 +20,6 @@ const useResizeObserver = (ref) => {
 
 export const HistoryChart = ({ data }) => {
 	const [historicData, setHistoricData] = useState([]);
-
 	const [scaleMinDelta, setScaleMinDelta] = useState(-5);
 	const [scaleMaxDelta, setScaleMaxDelta] = useState(5);
 	const [historySize, setHistorySize] = useState(10);
