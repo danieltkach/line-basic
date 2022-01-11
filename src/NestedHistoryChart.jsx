@@ -18,13 +18,29 @@ const useResizeObserver = (ref) => {
 	return dimensions;
 }
 
-export const HistoryChart = ({ data }) => {
+export const NestedHistoryChart = ({ data }) => {
+
+
+
+	//----------------------------------------
+	const NESTED_MOCK = [
+		{name: 'Data Ingress', value: 50},
+		{name: 'Data Egress', value: 30},
+		{name: 'Data Ingress', value: 74},
+		{name: 'Data Egress', value: 60},
+		{name: 'Data Ingress', value: 100},
+		{name: 'Data Egress', value: 20},
+	];
+	let nestedData = d3.group(NESTED_MOCK, d => d.name)
+	console.log(nestedData);
+	//----------------------------------------
+
 	const [historicData, setHistoricData] = useState([]);
 
 	const [scaleMinDelta, setScaleMinDelta] = useState(-5);
 	const [scaleMaxDelta, setScaleMaxDelta] = useState(5);
 	const [historySize, setHistorySize] = useState(10);
-	
+
 	const containerRef = useRef();
 	const dimensions = useResizeObserver(containerRef);
 	const svgRef = useRef();
@@ -79,13 +95,15 @@ export const HistoryChart = ({ data }) => {
 		svg.selectAll('.tick line').style('stroke', '#999');
 		svg.selectAll('.tick text').style('fill', '#999').style('stroke', 'none');
 
+		// Plotting the lines ---
+		const g = svg.append('g');
 		svg
+		// g
 			.selectAll('.line')
 			.data([historicData])
 			.join('path')
 			.attr('class', 'line')
 			.attr('d', line1)
-			// .attr('stroke', d => '#00357a')
 			.attr('stroke', d => colorScale(d[0]))
 			.attr('fill', 'none')
 			.attr('stroke-width', 3)
