@@ -17,16 +17,25 @@ export const App = () => {
 		"packetsDropped": null
 	};
 
+	function getRandom(min, max) {
+		return Math.round(Math.random() * min + (max - min))
+	}
+
 	useEffect(() => {
 		const timer1 = setInterval(() => {
-			let random1 = Math.round(Math.random() * 10 + 65);
-			let random2 = Math.round(Math.random() * 10 + 65);
-			setData({name: 'dt-swXtch', 
-				packetsOut: random1, 
-				packetsIn: random2, 
-				bytesOut: 0, 
-				bytesIn: 0, 
-				packetsDropped: 0})
+			let random1 = getRandom(10, 55);
+			let random2 = getRandom(10, 55);
+			let random3 = getRandom(10, 55);
+			let random4 = getRandom(10, 55);
+			let random5 = getRandom(10, 55);
+			setData({
+				name: 'dt-swXtch',
+				packetsOut: random1,
+				packetsIn: random2,
+				bytesOut: random3,
+				bytesIn: random4,
+				packetsDropped: random5
+			})
 		}, 1000);
 
 		return () => clearInterval(timer1);
@@ -34,8 +43,8 @@ export const App = () => {
 
 	return (
 		<div className="App" style={appStyles}>
-			<MultipleHistoryChart data={data} />
-			{/* <BandwidthChart /> */}
+			{/* <MultipleHistoryChart data={data} /> */}
+			<BandwidthChart data={data} />
 		</div>
 	)
 }

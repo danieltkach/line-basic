@@ -61,8 +61,7 @@ export const MultipleHistoryChart = ({ data }) => {
 		let bytesIn = newData?.map(x => x?.bytesIn);
 		let packetsDropped = newData?.map(x => x?.packetsDropped);
 
-		console.log(newData);
-
+		
 		const nestedData = [
 			{
 				key: 'Packets Out',
@@ -73,7 +72,8 @@ export const MultipleHistoryChart = ({ data }) => {
 				value: packetsIn.map((x, i) => ({ xValue: i, yValue: x }))
 			},
 		]
-
+		console.log(nestedData);
+		
 		const xScale = d3.scaleLinear()
 			.domain([historySize, 0])
 			.range([0, svgWidth - horizontalMargin]);

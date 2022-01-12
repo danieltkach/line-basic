@@ -21,7 +21,11 @@ const useResizeObserver = (ref) => {
 export const BandwidthChart = ({ data }) => {
 	const [historicData, setHistoricData] = useState([]);
 	const [historySize, setHistorySize] = useState(10);
+	const containerRef = useRef();
 	const dimensions = useResizeObserver(containerRef);
+	const [chartData, setChartData] = useState()
+
+	console.log(data)
 
 	useEffect(() => {
 		if (!dimensions || !historicData) return;
@@ -37,37 +41,46 @@ export const BandwidthChart = ({ data }) => {
 		let bytesIn = newData?.map(x => x?.bytesIn);
 		let packetsDropped = newData?.map(x => x?.packetsDropped);
 
-		const nestedData = [
-			{
-				key: 'Packets Out',
-				value: packetsOut.map((x, i) => ({ xValue: i, yValue: x }))
-			},
-			{
-				key: 'Packets In',
-				value: packetsIn.map((x, i) => ({ xValue: i, yValue: x }))
-			},
-		];
+		let trace1 = {
+			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			y: packetsOut,
+			type: 'scatter'
+		};
+		let trace2 = {
+			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			y: packetsIn,
+			type: 'scatter'
+		};
+		let trace3 = {
+			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			y: bytesOut,
+			type: 'scatter'
+		};
+		let trace4 = {
+			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			y: bytesIn,
+			type: 'scatter'
+		};
+		let trace5 = {
+			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			y: packetsDropped,
+			type: 'scatter'
+		};
+
+		setChartData([trace1, trace2, trace3, trace4, trace5])
+	
 
 	}, [data]);
 
-	var trace1 = {
-		x: [1, 2, 3, 4],
-		y: [10, 15, 13, 17],
-		type: 'scatter'
-	};
-
-	var trace2 = {
-		x: [1, 2, 3, 4],
-		y: [16, 5, 11, 9],
-		type: 'scatter'
-	};
+	
+	const {width, height} = dimensions || {};
 
 
 	return (
-		<div ref={containerRef}>
+		<div ref={containerRef} style={{height: '100vh', width: '100vw'}}>
 			<Plot
-				data={[trace1, trace2]}
-				layout={{ width: 320, height: 240, title: 'A Fancy Plot' }}
+				data={chartData}
+				layout={{ width, height, title: 'Bandwidth Chart' }}
 			/>
 		</div>
 	)
