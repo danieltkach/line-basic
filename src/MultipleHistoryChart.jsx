@@ -28,6 +28,25 @@ export const MultipleHistoryChart = ({ data }) => {
 	const dimensions = useResizeObserver(containerRef);
 	const svgRef = useRef();
 
+	const verticalMargin = 40;
+	const horizontalMargin = 40;
+	let svgWidth;
+	let svgHeight;
+	let svg;
+	let svgGroup;
+
+	if (dimensions) {
+		svgWidth = dimensions.width - horizontalMargin;
+		svgHeight = dimensions.height - verticalMargin;
+
+		svg = d3.select(svgRef.current)
+			.attr('width', svgWidth + horizontalMargin)
+			.attr('height', svgHeight + verticalMargin)
+			.style('background', "#eee");
+		
+		svgGroup = svg.append('g');
+	}
+
 	useEffect(() => {
 		if (!dimensions || !historicData) return;
 
@@ -36,23 +55,23 @@ export const MultipleHistoryChart = ({ data }) => {
 		newData.unshift(data);
 		setHistoricData(newData);
 
-
-		let packetsOut = newData?.map(x => x?.packetsOut);		
+		let packetsOut = newData?.map(x => x?.packetsOut);
 		let packetsIn = newData?.map(x => x?.packetsIn);
 		let bytesOut = newData?.map(x => x?.bytesOut);
 		let bytesIn = newData?.map(x => x?.bytesIn);
 		let packetsDropped = newData?.map(x => x?.packetsDropped);
 
-
-		const verticalMargin = 40;
-		const horizontalMargin = 40;
-		const svgWidth = dimensions.width - horizontalMargin;
-		const svgHeight = dimensions.height - verticalMargin;
-
-		const svg = d3.select(svgRef.current)
-			.attr('width', svgWidth + horizontalMargin)
-			.attr('height', svgHeight + verticalMargin)
-			.style('background', "#eee");
+		const nestedData = [
+			{
+				key: 'Packets Out',
+				value: packetsOut.map((x,i) => ({xValue: i, yValue: x}))
+			},
+			{
+				key: 'Packets In',
+				value: packetsIn.map((x,i) => ({xValue: i, yValue: x}))
+			},
+		]
+		console.log(nestedData);
 
 		const xScale = d3.scaleLinear()
 			.domain([historySize, 0])
@@ -68,7 +87,7 @@ export const MultipleHistoryChart = ({ data }) => {
 			.domain(yDomain)
 			.range(['orange', 'green']);
 
-		const line1 = d3.line()
+		const linexy = d3.line()
 			.x((v, i) => xScale(i))
 			.y(yScale)
 			.curve(d3.curveNatural);
@@ -88,18 +107,29 @@ export const MultipleHistoryChart = ({ data }) => {
 		svg.selectAll('.tick text').style('fill', '#999').style('stroke', 'none');
 
 		// Plotting the lines ---
-		const g = svg.append('g');
-		svg
-		// g
-			.selectAll('.line')
-			.data([packetsOut])
+		// svg
+		// 	.selectAll('.packetsOut')
+		// 	.data([packetsOut])
+		// 	.join('path')
+		// 	.attr('class', 'packetsOut')
+		// 	.attr('d', linexy)
+		// 	.attr('stroke', d => colorScale(d[0]))
+		// 	.attr('fill', 'none')
+		// 	.attr('stroke-width', 3)
+		// 	.style('transform', `translate(${horizontalMargin}px, ${verticalMargin}px)`);
+
+		svgGroup.selectAll('path')
+			.data(nestedData)
 			.join('path')
-			.attr('class', 'line')
-			.attr('d', line1)
-			.attr('stroke', d => colorScale(d[0]))
 			.attr('fill', 'none')
-			.attr('stroke-width', 3)
-			.style('transform', `translate(${horizontalMargin}px, ${verticalMargin}px)`);
+      .attr('stroke-width', 1.5)
+      .attr('stroke', 'orange')
+			// .attr('d', linexy)
+			.attr("d", d => {
+				return d3.line()
+					.x(d => xScale(+d.xValue))
+					.y(d => yScale(+d.yValue))
+			});
 
 	}, [data]);
 
@@ -109,7 +139,8 @@ export const MultipleHistoryChart = ({ data }) => {
 				<div>
 					<label>
 						<span>history size:</span>
-						<input type="number" step={1} min={2} max={999} value={historySize} onChange={(e) => setHistorySize(+e.target.value)} />
+						<input type="number" step={1} min={2}
+							max={999} value={historySize} onChange={(e) => setHistorySize(+e.target.value)} />
 					</label>
 				</div>
 				<div>

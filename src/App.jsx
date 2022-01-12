@@ -18,10 +18,14 @@ export const App = () => {
 
 	useEffect(() => {
 		const timer1 = setInterval(() => {
-			// setData(Math.round(Math.random() * 10 + 65
 			let random1 = Math.round(Math.random() * 10 + 65);
 			let random2 = Math.round(Math.random() * 10 + 65);
-			setData({name: 'dt-swXtch', packetsOut: random1, packetsIn: random2, bytesOut: 0, bytesIn: 0})
+			setData({name: 'dt-swXtch', 
+				packetsOut: random1, 
+				packetsIn: random2, 
+				bytesOut: 0, 
+				bytesIn: 0, 
+				packetsDropped: 0})
 		}, 1000);
 
 		return () => clearInterval(timer1);
