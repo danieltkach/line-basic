@@ -20,9 +20,9 @@ const useResizeObserver = (ref) => {
 
 export const MultipleHistoryChart = ({ data }) => {
 	const [historicData, setHistoricData] = useState([]);
+	const [historySize, setHistorySize] = useState(10);
 	const [scaleMinDelta, setScaleMinDelta] = useState(-5);
 	const [scaleMaxDelta, setScaleMaxDelta] = useState(5);
-	const [historySize, setHistorySize] = useState(10);
 
 	const containerRef = useRef();
 	const dimensions = useResizeObserver(containerRef);
@@ -43,7 +43,7 @@ export const MultipleHistoryChart = ({ data }) => {
 			.attr('width', svgWidth + horizontalMargin)
 			.attr('height', svgHeight + verticalMargin)
 			.style('background', "#eee");
-		
+
 		svgGroup = svg.append('g');
 	}
 
@@ -61,17 +61,18 @@ export const MultipleHistoryChart = ({ data }) => {
 		let bytesIn = newData?.map(x => x?.bytesIn);
 		let packetsDropped = newData?.map(x => x?.packetsDropped);
 
+		console.log(newData);
+
 		const nestedData = [
 			{
 				key: 'Packets Out',
-				value: packetsOut.map((x,i) => ({xValue: i, yValue: x}))
+				value: packetsOut.map((x, i) => ({ xValue: i, yValue: x }))
 			},
 			{
 				key: 'Packets In',
-				value: packetsIn.map((x,i) => ({xValue: i, yValue: x}))
+				value: packetsIn.map((x, i) => ({ xValue: i, yValue: x }))
 			},
 		]
-		console.log(nestedData);
 
 		const xScale = d3.scaleLinear()
 			.domain([historySize, 0])
@@ -122,49 +123,45 @@ export const MultipleHistoryChart = ({ data }) => {
 			.data(nestedData)
 			.join('path')
 			.attr('fill', 'none')
-      .attr('stroke-width', 1.5)
-      .attr('stroke', 'orange')
+			.attr('stroke-width', 1.5)
+			.attr('stroke', 'orange')
 			// .attr('d', linexy)
-			.attr("d", d => {
-				return d3.line()
-					.x(d => xScale(+d.xValue))
-					.y(d => yScale(+d.yValue))
-			});
+			.attr("d", d => d3.line().x(d => xScale(d.xValue)).y(d => yScale(d.yValue)));
 
-	}, [data]);
+			}, [data]);
 
-	return (
-		<Container>
-			<Toolbar>
-				<div>
-					<label>
-						<span>history size:</span>
-						<input type="number" step={1} min={2}
-							max={999} value={historySize} onChange={(e) => setHistorySize(+e.target.value)} />
-					</label>
+		return (
+			<Container>
+				<Toolbar>
+					<div>
+						<label>
+							<span>history size:</span>
+							<input type="number" step={1} min={2}
+								max={999} value={historySize} onChange={(e) => setHistorySize(+e.target.value)} />
+						</label>
+					</div>
+					<div>
+						<label>
+							<span>min offset:</span>
+							<input type="number" step={1} max={0} value={scaleMinDelta} onChange={(e) => setScaleMinDelta(+e.target.value)} />
+						</label>
+						<label>
+							<span>max offset:</span>
+							<input type="number" step={1} min={0} value={scaleMaxDelta} onChange={(e) => setScaleMaxDelta(+e.target.value)} />
+						</label>
+					</div>
+				</Toolbar>
+
+				<div ref={containerRef} style={{ display: 'flex', alignItems: 'stretch', height: '90%' }}>
+					<svg ref={svgRef} style={{ display: 'block', width: '100%' }}>
+						<g className="x-axis" />
+						<g className="y-axis" />
+					</svg>
 				</div>
-				<div>
-					<label>
-						<span>min offset:</span>
-						<input type="number" step={1} max={0} value={scaleMinDelta} onChange={(e) => setScaleMinDelta(+e.target.value)} />
-					</label>
-					<label>
-						<span>max offset:</span>
-						<input type="number" step={1} min={0} value={scaleMaxDelta} onChange={(e) => setScaleMaxDelta(+e.target.value)} />
-					</label>
-				</div>
-			</Toolbar>
 
-			<div ref={containerRef} style={{ display: 'flex', alignItems: 'stretch', height: '90%' }}>
-				<svg ref={svgRef} style={{ display: 'block', width: '100%' }}>
-					<g className="x-axis" />
-					<g className="y-axis" />
-				</svg>
-			</div>
-
-		</Container>
-	)
-}
+			</Container>
+		)
+	}
 
 const Container = styled.div`
 	display: flex;
@@ -175,7 +172,7 @@ const Container = styled.div`
 	font-family: system-ui;
 `;
 
-const Toolbar = styled.div`
+	const Toolbar = styled.div`
 	height: 5%;
 	padding: 0.5em;
 	display: flex;

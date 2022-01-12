@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BandwidthChart } from './BandwidthChart';
 import { MultipleHistoryChart } from './MultipleHistoryChart';
 
 const appStyles = { height: '100vh' };
@@ -34,6 +35,7 @@ export const App = () => {
 	return (
 		<div className="App" style={appStyles}>
 			<MultipleHistoryChart data={data} />
+			{/* <BandwidthChart /> */}
 		</div>
 	)
 }

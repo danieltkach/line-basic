@@ -1,0 +1,44 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-plotly.js plotly.js
+
+PATH: 
+  C:\Python39\Scripts\;C:\Python39\;C:\Python38\Scripts\;C:\Python38\;C:\Program Files (x86)\Python38-32\Scripts\;C:\Program Files (x86)\Python38-32\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\ProgramData\chocolatey\bin;C:\Program Files\Calibre2\;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\PowerShell\7\;C:\Program Files\Git\cmd;C:\Program Files\MongoDB\Server\4.4\bin;C:\Program Files\PuTTY\;C:\Program Files (x86)\WinSCP\;%NVM_HOME%;%NVM_SYMLINK%;C:\Users\Daniel\AppData\Local\Microsoft\WindowsApps;C:\Users\Daniel\AppData\Local\Programs\Microsoft VS Code Insiders\bin;C:\Users\Daniel\AppData\Local\Yarn\bin;C:\Program Files\Git;C:\Users\Daniel\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\MongoDB\Server\4.4\bin;C:\Program Files\heroku\bin;C:\Users\Daniel\Downloads\Postbird-0.8.4-win\vendor\win32;C:\Users\Daniel\Programming\MSX\sjasm42c;C:\Users\Daniel\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\Daniel\AppData\Local\GitHubDesktop\bin
+
+Yarn version: 
+  1.22.5
+
+Node version: 
+  16.13.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'C:\Users\Daniel\Programming\D3\line-basic\node_modules\esbuild-windows-64\esbuild.exe'
+
+npm manifest: 
+  {
+    "name": "line-basic",
+    "version": "0.0.0",
+    "scripts": {
+      "start": "vite",
+      "build": "vite build",
+      "preview": "vite preview"
+    },
+    "dependencies": {
+      "d3": "^6.2.0",
+      "react": "^17.0.2",
+      "react-dom": "^17.0.2",
+      "styled-components": "^5.3.3"
+    },
+    "devDependencies": {
+      "@vitejs/plugin-react": "^1.0.7",
+      "vite": "^2.7.2"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
