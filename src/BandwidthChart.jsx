@@ -25,8 +25,6 @@ export const BandwidthChart = ({ data }) => {
 	const dimensions = useResizeObserver(containerRef);
 	const [chartData, setChartData] = useState()
 
-	console.log(data)
-
 	useEffect(() => {
 		if (!dimensions || !historicData) return;
 
@@ -35,34 +33,37 @@ export const BandwidthChart = ({ data }) => {
 		newData.unshift(data);
 		setHistoricData(newData);
 
+		let timestamps = newData?.map(x => x?.timestamp);
 		let packetsOut = newData?.map(x => x?.packetsOut);
 		let packetsIn = newData?.map(x => x?.packetsIn);
 		let bytesOut = newData?.map(x => x?.bytesOut);
 		let bytesIn = newData?.map(x => x?.bytesIn);
 		let packetsDropped = newData?.map(x => x?.packetsDropped);
 
+
+
 		let trace1 = {
-			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			x: timestamps,
 			y: packetsOut,
 			type: 'scatter'
 		};
 		let trace2 = {
-			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			x: timestamps,
 			y: packetsIn,
 			type: 'scatter'
 		};
 		let trace3 = {
-			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			x: timestamps,
 			y: bytesOut,
 			type: 'scatter'
 		};
 		let trace4 = {
-			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			x: timestamps,
 			y: bytesIn,
 			type: 'scatter'
 		};
 		let trace5 = {
-			x: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+			x: timestamps,
 			y: packetsDropped,
 			type: 'scatter'
 		};

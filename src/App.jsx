@@ -30,6 +30,7 @@ export const App = () => {
 			let random5 = getRandom(10, 55);
 			setData({
 				name: 'dt-swXtch',
+				timestamp: ['12:00 AM', '12:05 AM', '12:10 AM', '12:15 AM', '12:20 AM', '12:25 AM', '12:30 AM', '12:35 AM'],
 				packetsOut: random1,
 				packetsIn: random2,
 				bytesOut: random3,
