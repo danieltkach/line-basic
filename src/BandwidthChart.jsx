@@ -69,16 +69,16 @@ export const BandwidthChart = ({ data }) => {
 		};
 
 		setChartData([trace1, trace2, trace3, trace4, trace5])
-	
+
 
 	}, [data]);
 
-	
-	const {width, height} = dimensions || {};
+
+	const { width, height } = dimensions || {};
 
 
 	return (
-		<div ref={containerRef} style={{height: '100vh', width: '100vw'}}>
+		<div ref={containerRef} style={{ height: '100vh', width: '100vw' }}>
 			<Plot
 				data={chartData}
 				layout={{ width, height, title: 'Bandwidth Chart' }}
