@@ -18,15 +18,15 @@ const useResizeObserver = (ref) => {
 	return dimensions;
 }
 
-export const HistoryChart = ({ data }) => {
+export const HistoryChart = ({ data, lineColor }) => {
 	const [historicData, setHistoricData] = useState([]);
-	const [scaleMinDelta, setScaleMinDelta] = useState(-5);
-	const [scaleMaxDelta, setScaleMaxDelta] = useState(5);
-	const [historySize, setHistorySize] = useState(10);
-	
+	const [scaleMinDelta, setScaleMinDelta] = useState(-0.15);
+	const [scaleMaxDelta, setScaleMaxDelta] = useState(0.15);
+	const [historySize, setHistorySize] = useState(300);
 	const containerRef = useRef();
 	const dimensions = useResizeObserver(containerRef);
 	const svgRef = useRef();
+	const [showToolbar, setShowToolbar] = useState(false);
 
 	useEffect(() => {
 		if (!dimensions || !historicData) return;
@@ -36,8 +36,8 @@ export const HistoryChart = ({ data }) => {
 		newData.unshift(data);
 		setHistoricData(newData);
 
-		const verticalMargin = 40;
-		const horizontalMargin = 40;
+		const verticalMargin = 10;
+		const horizontalMargin = 10;
 		const svgWidth = dimensions.width - horizontalMargin;
 		const svgHeight = dimensions.height - verticalMargin;
 
@@ -67,12 +67,12 @@ export const HistoryChart = ({ data }) => {
 		const xAxis = d3.axisBottom(xScale).ticks(historicData.length);
 		svg.select('.x-axis')
 			.style('transform', `translate(${horizontalMargin}px, ${svgHeight + 5}px)`)
-			.call(xAxis);
+			// .call(xAxis);
 
 		const yAxis = d3.axisRight(yScale);
 		svg.select('.y-axis')
 			.style('transform', `translate(${svgWidth}px, ${verticalMargin}px)`)
-			.call(yAxis);
+			// .call(yAxis);
 
 		svg.selectAll('.domain').style('stroke', '#999');
 		svg.selectAll('.tick line').style('stroke', '#999');
@@ -84,17 +84,17 @@ export const HistoryChart = ({ data }) => {
 			.join('path')
 			.attr('class', 'line')
 			.attr('d', line1)
+			.attr('stroke', d => `${lineColor}`)
 			// .attr('stroke', d => '#00357a')
-			.attr('stroke', d => colorScale(d[0]))
+			// .attr('stroke', d => colorScale(d[0]))
 			.attr('fill', 'none')
-			.attr('stroke-width', 3)
-			.style('transform', `translate(${horizontalMargin}px, ${verticalMargin}px)`);
-
+			.attr('stroke-width', 2)
+			.style('transform', `translate(${horizontalMargin}px, ${verticalMargin}px)`)
 	}, [data]);
 
 	return (
 		<Container>
-			<Toolbar>
+			{showToolbar && (<Toolbar>
 				<div>
 					<label>
 						<span>history size:</span>
@@ -111,9 +111,9 @@ export const HistoryChart = ({ data }) => {
 						<input type="number" step={1} min={0} value={scaleMaxDelta} onChange={(e) => setScaleMaxDelta(+e.target.value)} />
 					</label>
 				</div>
-			</Toolbar>
+			</Toolbar>)}
 
-			<div ref={containerRef} style={{ display: 'flex', alignItems: 'stretch', height: '90%' }}>
+			<div ref={containerRef} style={{ display: 'flex', alignItems: 'stretch', height: '95%' }}>
 				<svg ref={svgRef} style={{ display: 'block', width: '100%' }}>
 					<g className="x-axis" />
 					<g className="y-axis" />
@@ -131,6 +131,7 @@ const Container = styled.div`
 	height: 100%;
   box-sizing: border-box;
 	font-family: system-ui;
+	height: 16%;
 `;
 
 const Toolbar = styled.div`
